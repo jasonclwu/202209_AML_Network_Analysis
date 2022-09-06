@@ -1,0 +1,204 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+        #loadingBar {
+            position:absolute;
+            top:0px;
+            left:0px;
+            width: 100%;
+            height: 100%;
+            background-color:rgba(200,200,200,0.8);
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -ms-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+            opacity:1;
+        }
+
+        #bar {
+            position:absolute;
+            top:0px;
+            left:0px;
+            width:20px;
+            height:20px;
+            margin:auto auto auto auto;
+            border-radius:11px;
+            border:2px solid rgba(30,30,30,0.05);
+            background: rgb(0, 173, 246); /* Old browsers */
+            box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+        }
+
+        #border {
+            position:absolute;
+            top:10px;
+            left:10px;
+            width:500px;
+            height:23px;
+            margin:auto auto auto auto;
+            box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+            border-radius:10px;
+        }
+
+        #text {
+            position:absolute;
+            top:8px;
+            left:530px;
+            width:30px;
+            height:50px;
+            margin:auto auto auto auto;
+            font-size:22px;
+            color: #000000;
+        }
+
+        div.outerBorder {
+            position:relative;
+            top:400px;
+            width:600px;
+            height:44px;
+            margin:auto auto auto auto;
+            border:8px solid rgba(0,0,0,0.1);
+            background: rgb(252,252,252); /* Old browsers */
+            background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+            background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+            border-radius:72px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+        }
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+<div id="loadingBar">
+    <div class="outerBorder">
+        <div id="text">0%</div>
+        <div id="border">
+            <div id="bar"></div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"id": "6427", "label": "6427", "shape": "dot", "size": 10, "title": "id: 6427\ndegree: 2\nneighbor: 8264,9245", "value": 2}, {"id": "8264", "label": "8264", "shape": "dot", "size": 10, "title": "id: 8264\ndegree: 1\nneighbor: 6427", "value": 1}, {"id": "9245", "label": "9245", "shape": "dot", "size": 10, "title": "id: 9245\ndegree: 24\nneighbor: 6427,9056,1651,2483,2681,3221,3339,335,4043,4626,6663,7121,7464,7983,8169,8606,8652,8994,9522,9532,9693,9800,9869,9964", "value": 24}, {"id": "9056", "label": "9056", "shape": "dot", "size": 10, "title": "id: 9056\ndegree: 20\nneighbor: 1127,172,2788,3144,3667,4508,4813,5864,6339,6834,7366,7863,8371,8759,9045,9084,9245,9746,9842,9959", "value": 20}, {"id": "1651", "label": "1651", "shape": "dot", "size": 10, "title": "id: 1651\ndegree: 1\nneighbor: 9245", "value": 1}, {"id": "2483", "label": "2483", "shape": "dot", "size": 10, "title": "id: 2483\ndegree: 1\nneighbor: 9245", "value": 1}, {"id": "2681", "label": "2681", "shape": "dot", "size": 10, "title": "id: 2681\ndegree: 1\nneighbor: 9245", "value": 1}, {"id": "3221", "label": "3221", "shape": "dot", "size": 10, "title": "id: 3221\ndegree: 1\nneighbor: 9245", "value": 1}, {"id": "3339", "label": "3339", "shape": "dot", "size": 10, "title": "id: 3339\ndegree: 1\nneighbor: 9245", "value": 1}, {"id": "335", "label": "335", "shape": "dot", "size": 10, "title": "id: 335\ndegree: 1\nneighbor: 9245", "value": 1}, {"id": "4043", "label": "4043", "shape": "dot", "size": 10, "title": "id: 4043\ndegree: 1\nneighbor: 9245", "value": 1}, {"id": "4626", "label": "4626", "shape": "dot", "size": 10, "title": "id: 4626\ndegree: 1\nneighbor: 9245", "value": 1}, {"id": "6663", "label": "6663", "shape": "dot", "size": 10, "title": "id: 6663\ndegree: 1\nneighbor: 9245", "value": 1}, {"id": "7121", "label": "7121", "shape": "dot", "size": 10, "title": "id: 7121\ndegree: 1\nneighbor: 9245", "value": 1}, {"id": "7464", "label": "7464", "shape": "dot", "size": 10, "title": "id: 7464\ndegree: 1\nneighbor: 9245", "value": 1}, {"id": "7983", "label": "7983", "shape": "dot", "size": 10, "title": "id: 7983\ndegree: 1\nneighbor: 9245", "value": 1}, {"id": "8169", "label": "8169", "shape": "dot", "size": 10, "title": "id: 8169\ndegree: 1\nneighbor: 9245", "value": 1}, {"id": "8606", "label": "8606", "shape": "dot", "size": 10, "title": "id: 8606\ndegree: 1\nneighbor: 9245", "value": 1}, {"id": "8652", "label": "8652", "shape": "dot", "size": 10, "title": "id: 8652\ndegree: 1\nneighbor: 9245", "value": 1}, {"id": "8994", "label": "8994", "shape": "dot", "size": 10, "title": "id: 8994\ndegree: 1\nneighbor: 9245", "value": 1}, {"id": "9522", "label": "9522", "shape": "dot", "size": 10, "title": "id: 9522\ndegree: 1\nneighbor: 9245", "value": 1}, {"id": "9532", "label": "9532", "shape": "dot", "size": 10, "title": "id: 9532\ndegree: 1\nneighbor: 9245", "value": 1}, {"id": "9693", "label": "9693", "shape": "dot", "size": 10, "title": "id: 9693\ndegree: 1\nneighbor: 9245", "value": 1}, {"id": "9800", "label": "9800", "shape": "dot", "size": 10, "title": "id: 9800\ndegree: 1\nneighbor: 9245", "value": 1}, {"id": "9869", "label": "9869", "shape": "dot", "size": 10, "title": "id: 9869\ndegree: 1\nneighbor: 9245", "value": 1}, {"id": "9964", "label": "9964", "shape": "dot", "size": 10, "title": "id: 9964\ndegree: 1\nneighbor: 9245", "value": 1}, {"id": "7366", "label": "7366", "shape": "dot", "size": 10, "title": "id: 7366\ndegree: 13\nneighbor: 1332,5463,5717,5776,6847,7368,7507,8182,8662,9500,9628,9892,9056", "value": 13}, {"id": "1332", "label": "1332", "shape": "dot", "size": 10, "title": "id: 1332\ndegree: 1\nneighbor: 7366", "value": 1}, {"id": "5463", "label": "5463", "shape": "dot", "size": 10, "title": "id: 5463\ndegree: 1\nneighbor: 7366", "value": 1}, {"id": "5717", "label": "5717", "shape": "dot", "size": 10, "title": "id: 5717\ndegree: 1\nneighbor: 7366", "value": 1}, {"id": "5776", "label": "5776", "shape": "dot", "size": 10, "title": "id: 5776\ndegree: 1\nneighbor: 7366", "value": 1}, {"id": "6847", "label": "6847", "shape": "dot", "size": 10, "title": "id: 6847\ndegree: 1\nneighbor: 7366", "value": 1}, {"id": "7368", "label": "7368", "shape": "dot", "size": 10, "title": "id: 7368\ndegree: 1\nneighbor: 7366", "value": 1}, {"id": "7507", "label": "7507", "shape": "dot", "size": 10, "title": "id: 7507\ndegree: 1\nneighbor: 7366", "value": 1}, {"id": "8182", "label": "8182", "shape": "dot", "size": 10, "title": "id: 8182\ndegree: 1\nneighbor: 7366", "value": 1}, {"id": "8662", "label": "8662", "shape": "dot", "size": 10, "title": "id: 8662\ndegree: 1\nneighbor: 7366", "value": 1}, {"id": "9500", "label": "9500", "shape": "dot", "size": 10, "title": "id: 9500\ndegree: 1\nneighbor: 7366", "value": 1}, {"id": "9628", "label": "9628", "shape": "dot", "size": 10, "title": "id: 9628\ndegree: 34\nneighbor: 7366,1585,3484,3661,4136,4189,4454,5833,5845,6408,6415,6620,6672,6812,7350,7515,7939,807,8151,8252,8297,8669,9219,9284,9423,9455,9676,9720,9825,9917,9961,9973,9974,9988", "value": 34}, {"id": "9892", "label": "9892", "shape": "dot", "size": 10, "title": "id: 9892\ndegree: 1\nneighbor: 7366", "value": 1}, {"id": "1585", "label": "1585", "shape": "dot", "size": 10, "title": "id: 1585\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "3484", "label": "3484", "shape": "dot", "size": 10, "title": "id: 3484\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "3661", "label": "3661", "shape": "dot", "size": 10, "title": "id: 3661\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "4136", "label": "4136", "shape": "dot", "size": 10, "title": "id: 4136\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "4189", "label": "4189", "shape": "dot", "size": 10, "title": "id: 4189\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "4454", "label": "4454", "shape": "dot", "size": 10, "title": "id: 4454\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "5833", "label": "5833", "shape": "dot", "size": 10, "title": "id: 5833\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "5845", "label": "5845", "shape": "dot", "size": 10, "title": "id: 5845\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "6408", "label": "6408", "shape": "dot", "size": 10, "title": "id: 6408\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "6415", "label": "6415", "shape": "dot", "size": 10, "title": "id: 6415\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "6620", "label": "6620", "shape": "dot", "size": 10, "title": "id: 6620\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "6672", "label": "6672", "shape": "dot", "size": 10, "title": "id: 6672\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "6812", "label": "6812", "shape": "dot", "size": 10, "title": "id: 6812\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "7350", "label": "7350", "shape": "dot", "size": 10, "title": "id: 7350\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "7515", "label": "7515", "shape": "dot", "size": 10, "title": "id: 7515\ndegree: 3\nneighbor: 8255,8682,9628", "value": 3}, {"id": "7939", "label": "7939", "shape": "dot", "size": 10, "title": "id: 7939\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "807", "label": "807", "shape": "dot", "size": 10, "title": "id: 807\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "8151", "label": "8151", "shape": "dot", "size": 10, "title": "id: 8151\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "8252", "label": "8252", "shape": "dot", "size": 10, "title": "id: 8252\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "8297", "label": "8297", "shape": "dot", "size": 10, "title": "id: 8297\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "8669", "label": "8669", "shape": "dot", "size": 10, "title": "id: 8669\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "9219", "label": "9219", "shape": "dot", "size": 10, "title": "id: 9219\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "9284", "label": "9284", "shape": "dot", "size": 10, "title": "id: 9284\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "9423", "label": "9423", "shape": "dot", "size": 10, "title": "id: 9423\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "9455", "label": "9455", "shape": "dot", "size": 10, "title": "id: 9455\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "9676", "label": "9676", "shape": "dot", "size": 10, "title": "id: 9676\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "9720", "label": "9720", "shape": "dot", "size": 10, "title": "id: 9720\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "9825", "label": "9825", "shape": "dot", "size": 10, "title": "id: 9825\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "9917", "label": "9917", "shape": "dot", "size": 10, "title": "id: 9917\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "9961", "label": "9961", "shape": "dot", "size": 10, "title": "id: 9961\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "9973", "label": "9973", "shape": "dot", "size": 10, "title": "id: 9973\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "9974", "label": "9974", "shape": "dot", "size": 10, "title": "id: 9974\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "9988", "label": "9988", "shape": "dot", "size": 10, "title": "id: 9988\ndegree: 1\nneighbor: 9628", "value": 1}, {"id": "8255", "label": "8255", "shape": "dot", "size": 10, "title": "id: 8255\ndegree: 1\nneighbor: 7515", "value": 1}, {"id": "8682", "label": "8682", "shape": "dot", "size": 10, "title": "id: 8682\ndegree: 17\nneighbor: 2612,4501,5071,5928,6124,6420,6521,7176,720,7285,7515,8511,9464,9512,9706,9932,9945", "value": 17}, {"id": "2612", "label": "2612", "shape": "dot", "size": 10, "title": "id: 2612\ndegree: 1\nneighbor: 8682", "value": 1}, {"id": "4501", "label": "4501", "shape": "dot", "size": 10, "title": "id: 4501\ndegree: 1\nneighbor: 8682", "value": 1}, {"id": "5071", "label": "5071", "shape": "dot", "size": 10, "title": "id: 5071\ndegree: 1\nneighbor: 8682", "value": 1}, {"id": "5928", "label": "5928", "shape": "dot", "size": 10, "title": "id: 5928\ndegree: 1\nneighbor: 8682", "value": 1}, {"id": "6124", "label": "6124", "shape": "dot", "size": 10, "title": "id: 6124\ndegree: 1\nneighbor: 8682", "value": 1}, {"id": "6420", "label": "6420", "shape": "dot", "size": 10, "title": "id: 6420\ndegree: 1\nneighbor: 8682", "value": 1}, {"id": "6521", "label": "6521", "shape": "dot", "size": 10, "title": "id: 6521\ndegree: 1\nneighbor: 8682", "value": 1}, {"id": "7176", "label": "7176", "shape": "dot", "size": 10, "title": "id: 7176\ndegree: 1\nneighbor: 8682", "value": 1}, {"id": "720", "label": "720", "shape": "dot", "size": 10, "title": "id: 720\ndegree: 1\nneighbor: 8682", "value": 1}, {"id": "7285", "label": "7285", "shape": "dot", "size": 10, "title": "id: 7285\ndegree: 1\nneighbor: 8682", "value": 1}, {"id": "8511", "label": "8511", "shape": "dot", "size": 10, "title": "id: 8511\ndegree: 1\nneighbor: 8682", "value": 1}, {"id": "9464", "label": "9464", "shape": "dot", "size": 10, "title": "id: 9464\ndegree: 1\nneighbor: 8682", "value": 1}, {"id": "9512", "label": "9512", "shape": "dot", "size": 10, "title": "id: 9512\ndegree: 1\nneighbor: 8682", "value": 1}, {"id": "9706", "label": "9706", "shape": "dot", "size": 10, "title": "id: 9706\ndegree: 1\nneighbor: 8682", "value": 1}, {"id": "9932", "label": "9932", "shape": "dot", "size": 10, "title": "id: 9932\ndegree: 1\nneighbor: 8682", "value": 1}, {"id": "9945", "label": "9945", "shape": "dot", "size": 10, "title": "id: 9945\ndegree: 1\nneighbor: 8682", "value": 1}, {"id": "1127", "label": "1127", "shape": "dot", "size": 10, "title": "id: 1127\ndegree: 1\nneighbor: 9056", "value": 1}, {"id": "172", "label": "172", "shape": "dot", "size": 10, "title": "id: 172\ndegree: 1\nneighbor: 9056", "value": 1}, {"id": "2788", "label": "2788", "shape": "dot", "size": 10, "title": "id: 2788\ndegree: 1\nneighbor: 9056", "value": 1}, {"id": "3144", "label": "3144", "shape": "dot", "size": 10, "title": "id: 3144\ndegree: 1\nneighbor: 9056", "value": 1}, {"id": "3667", "label": "3667", "shape": "dot", "size": 10, "title": "id: 3667\ndegree: 1\nneighbor: 9056", "value": 1}, {"id": "4508", "label": "4508", "shape": "dot", "size": 10, "title": "id: 4508\ndegree: 1\nneighbor: 9056", "value": 1}, {"id": "4813", "label": "4813", "shape": "dot", "size": 10, "title": "id: 4813\ndegree: 1\nneighbor: 9056", "value": 1}, {"id": "5864", "label": "5864", "shape": "dot", "size": 10, "title": "id: 5864\ndegree: 1\nneighbor: 9056", "value": 1}, {"id": "6339", "label": "6339", "shape": "dot", "size": 10, "title": "id: 6339\ndegree: 1\nneighbor: 9056", "value": 1}, {"id": "6834", "label": "6834", "shape": "dot", "size": 10, "title": "id: 6834\ndegree: 1\nneighbor: 9056", "value": 1}, {"id": "7863", "label": "7863", "shape": "dot", "size": 10, "title": "id: 7863\ndegree: 1\nneighbor: 9056", "value": 1}, {"id": "8371", "label": "8371", "shape": "dot", "size": 10, "title": "id: 8371\ndegree: 1\nneighbor: 9056", "value": 1}, {"id": "8759", "label": "8759", "shape": "dot", "size": 10, "title": "id: 8759\ndegree: 1\nneighbor: 9056", "value": 1}, {"id": "9045", "label": "9045", "shape": "dot", "size": 10, "title": "id: 9045\ndegree: 1\nneighbor: 9056", "value": 1}, {"id": "9084", "label": "9084", "shape": "dot", "size": 10, "title": "id: 9084\ndegree: 1\nneighbor: 9056", "value": 1}, {"id": "9746", "label": "9746", "shape": "dot", "size": 10, "title": "id: 9746\ndegree: 1\nneighbor: 9056", "value": 1}, {"id": "9842", "label": "9842", "shape": "dot", "size": 10, "title": "id: 9842\ndegree: 1\nneighbor: 9056", "value": 1}, {"id": "9959", "label": "9959", "shape": "dot", "size": 10, "title": "id: 9959\ndegree: 1\nneighbor: 9056", "value": 1}]);
+        edges = new vis.DataSet([{"arrows": "to", "from": "6427", "label": 1, "title": "from: 6427\nto: 8264\nagg_count: 1\nagg_amount: 4", "to": "8264", "value": 4.34, "weight": 1}, {"arrows": "to", "from": "6427", "label": 1, "title": "from: 9245\nto: 6427\nagg_count: 1\nagg_amount: 1,598,027", "to": "9245", "value": 1598027.12, "weight": 1}, {"arrows": "to", "from": "9245", "label": 1, "title": "from: 9056\nto: 9245\nagg_count: 22\nagg_amount: 119", "to": "9056", "value": 119.01999999999995, "weight": 1}, {"arrows": "to", "from": "9245", "label": 1, "title": "from: 9245\nto: 1651\nagg_count: 1\nagg_amount: 979,960", "to": "1651", "value": 979960.37, "weight": 1}, {"arrows": "to", "from": "9245", "label": 1, "title": "from: 9245\nto: 2483\nagg_count: 1\nagg_amount: 162,291", "to": "2483", "value": 162291.12, "weight": 1}, {"arrows": "to", "from": "9245", "label": 1, "title": "from: 9245\nto: 2681\nagg_count: 1\nagg_amount: 244,163", "to": "2681", "value": 244163.4, "weight": 1}, {"arrows": "to", "from": "9245", "label": 1, "title": "from: 9245\nto: 3221\nagg_count: 1\nagg_amount: 151,708", "to": "3221", "value": 151707.79, "weight": 1}, {"arrows": "to", "from": "9245", "label": 1, "title": "from: 9245\nto: 3339\nagg_count: 1\nagg_amount: 370,964", "to": "3339", "value": 370963.75, "weight": 1}, {"arrows": "to", "from": "9245", "label": 1, "title": "from: 9245\nto: 335\nagg_count: 1\nagg_amount: 538,725", "to": "335", "value": 538725.37, "weight": 1}, {"arrows": "to", "from": "9245", "label": 1, "title": "from: 9245\nto: 4043\nagg_count: 2\nagg_amount: 21,490,270", "to": "4043", "value": 21490269.959999997, "weight": 1}, {"arrows": "to", "from": "9245", "label": 1, "title": "from: 9245\nto: 4626\nagg_count: 1\nagg_amount: 2,738,512", "to": "4626", "value": 2738512.25, "weight": 1}, {"arrows": "to", "from": "9245", "label": 1, "title": "from: 9245\nto: 6663\nagg_count: 2\nagg_amount: 21,499,708", "to": "6663", "value": 21499708.049999997, "weight": 1}, {"arrows": "to", "from": "9245", "label": 1, "title": "from: 9245\nto: 7121\nagg_count: 2\nagg_amount: 7,570,654", "to": "7121", "value": 7570654.41, "weight": 1}, {"arrows": "to", "from": "9245", "label": 1, "title": "from: 9245\nto: 7464\nagg_count: 2\nagg_amount: 16,080,764", "to": "7464", "value": 16080764.4, "weight": 1}, {"arrows": "to", "from": "9245", "label": 1, "title": "from: 9245\nto: 7983\nagg_count: 2\nagg_amount: 21,504,892", "to": "7983", "value": 21504892.39, "weight": 1}, {"arrows": "to", "from": "9245", "label": 1, "title": "from: 9245\nto: 8169\nagg_count: 1\nagg_amount: 88,057", "to": "8169", "value": 88056.77, "weight": 1}, {"arrows": "to", "from": "9245", "label": 1, "title": "from: 9245\nto: 8606\nagg_count: 1\nagg_amount: 7,169,399", "to": "8606", "value": 7169399.0, "weight": 1}, {"arrows": "to", "from": "9245", "label": 1, "title": "from: 9245\nto: 8652\nagg_count: 2\nagg_amount: 11,351,546", "to": "8652", "value": 11351546.02, "weight": 1}, {"arrows": "to", "from": "9245", "label": 1, "title": "from: 9245\nto: 8994\nagg_count: 1\nagg_amount: 57,000", "to": "8994", "value": 57000.47, "weight": 1}, {"arrows": "to", "from": "9245", "label": 1, "title": "from: 9245\nto: 9522\nagg_count: 1\nagg_amount: 84,855", "to": "9522", "value": 84855.31, "weight": 1}, {"arrows": "to", "from": "9245", "label": 1, "title": "from: 9245\nto: 9532\nagg_count: 2\nagg_amount: 10,614,639", "to": "9532", "value": 10614639.19, "weight": 1}, {"arrows": "to", "from": "9245", "label": 1, "title": "from: 9245\nto: 9693\nagg_count: 1\nagg_amount: 254,240", "to": "9693", "value": 254239.54, "weight": 1}, {"arrows": "to", "from": "9245", "label": 1, "title": "from: 9245\nto: 9800\nagg_count: 1\nagg_amount: 56,784", "to": "9800", "value": 56783.64, "weight": 1}, {"arrows": "to", "from": "9245", "label": 1, "title": "from: 9245\nto: 9869\nagg_count: 1\nagg_amount: 1,302,160", "to": "9869", "value": 1302159.75, "weight": 1}, {"arrows": "to", "from": "9245", "label": 1, "title": "from: 9245\nto: 9964\nagg_count: 2\nagg_amount: 21,527,848", "to": "9964", "value": 21527847.869999997, "weight": 1}, {"arrows": "to", "from": "7366", "label": 1, "title": "from: 7366\nto: 1332\nagg_count: 2\nagg_amount: 2,357,413", "to": "1332", "value": 2357413.18, "weight": 1}, {"arrows": "to", "from": "7366", "label": 1, "title": "from: 7366\nto: 5463\nagg_count: 2\nagg_amount: 1,527,734", "to": "5463", "value": 1527733.56, "weight": 1}, {"arrows": "to", "from": "7366", "label": 1, "title": "from: 7366\nto: 5717\nagg_count: 2\nagg_amount: 344,658", "to": "5717", "value": 344658.16000000003, "weight": 1}, {"arrows": "to", "from": "7366", "label": 1, "title": "from: 7366\nto: 5776\nagg_count: 2\nagg_amount: 6,139,436", "to": "5776", "value": 6139436.02, "weight": 1}, {"arrows": "to", "from": "7366", "label": 1, "title": "from: 7366\nto: 6847\nagg_count: 2\nagg_amount: 21,656,083", "to": "6847", "value": 21656082.95, "weight": 1}, {"arrows": "to", "from": "7366", "label": 1, "title": "from: 7366\nto: 7368\nagg_count: 2\nagg_amount: 4,203,000", "to": "7368", "value": 4202999.7, "weight": 1}, {"arrows": "to", "from": "7366", "label": 1, "title": "from: 7366\nto: 7507\nagg_count: 2\nagg_amount: 20,154,504", "to": "7507", "value": 20154503.7, "weight": 1}, {"arrows": "to", "from": "7366", "label": 1, "title": "from: 7366\nto: 8182\nagg_count: 2\nagg_amount: 11,742,008", "to": "8182", "value": 11742008.18, "weight": 1}, {"arrows": "to", "from": "7366", "label": 1, "title": "from: 7366\nto: 8662\nagg_count: 2\nagg_amount: 340,082", "to": "8662", "value": 340081.63, "weight": 1}, {"arrows": "to", "from": "7366", "label": 1, "title": "from: 7366\nto: 9500\nagg_count: 2\nagg_amount: 4,009,650", "to": "9500", "value": 4009649.82, "weight": 1}, {"arrows": "to", "from": "7366", "label": 1, "title": "from: 7366\nto: 9628\nagg_count: 2\nagg_amount: 5,313,366", "to": "9628", "value": 5313366.45, "weight": 1}, {"arrows": "to", "from": "7366", "label": 1, "title": "from: 7366\nto: 9892\nagg_count: 2\nagg_amount: 533,077", "to": "9892", "value": 533076.67, "weight": 1}, {"arrows": "to", "from": "7366", "label": 1, "title": "from: 9056\nto: 7366\nagg_count: 22\nagg_amount: 119", "to": "9056", "value": 119.01999999999995, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 1585\nagg_count: 20\nagg_amount: 2,230", "to": "1585", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 3484\nagg_count: 20\nagg_amount: 2,230", "to": "3484", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 3661\nagg_count: 20\nagg_amount: 2,230", "to": "3661", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 4136\nagg_count: 20\nagg_amount: 2,230", "to": "4136", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 4189\nagg_count: 20\nagg_amount: 2,230", "to": "4189", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 4454\nagg_count: 20\nagg_amount: 2,230", "to": "4454", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 5833\nagg_count: 20\nagg_amount: 2,230", "to": "5833", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 5845\nagg_count: 20\nagg_amount: 2,230", "to": "5845", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 6408\nagg_count: 20\nagg_amount: 2,230", "to": "6408", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 6415\nagg_count: 20\nagg_amount: 2,230", "to": "6415", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 6620\nagg_count: 20\nagg_amount: 2,230", "to": "6620", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 6672\nagg_count: 20\nagg_amount: 2,230", "to": "6672", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 6812\nagg_count: 20\nagg_amount: 2,230", "to": "6812", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 7350\nagg_count: 20\nagg_amount: 2,230", "to": "7350", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 7515\nagg_count: 20\nagg_amount: 2,230", "to": "7515", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 7939\nagg_count: 20\nagg_amount: 2,230", "to": "7939", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 807\nagg_count: 20\nagg_amount: 2,230", "to": "807", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 8151\nagg_count: 20\nagg_amount: 2,230", "to": "8151", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 8252\nagg_count: 20\nagg_amount: 2,230", "to": "8252", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 8297\nagg_count: 20\nagg_amount: 2,230", "to": "8297", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 8669\nagg_count: 20\nagg_amount: 2,230", "to": "8669", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 9219\nagg_count: 20\nagg_amount: 2,230", "to": "9219", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 9284\nagg_count: 20\nagg_amount: 2,230", "to": "9284", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 9423\nagg_count: 20\nagg_amount: 2,230", "to": "9423", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 9455\nagg_count: 20\nagg_amount: 2,230", "to": "9455", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 9676\nagg_count: 20\nagg_amount: 2,230", "to": "9676", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 9720\nagg_count: 20\nagg_amount: 2,230", "to": "9720", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 9825\nagg_count: 20\nagg_amount: 2,230", "to": "9825", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 9917\nagg_count: 20\nagg_amount: 2,230", "to": "9917", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 9961\nagg_count: 20\nagg_amount: 2,230", "to": "9961", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 9973\nagg_count: 20\nagg_amount: 2,230", "to": "9973", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 9974\nagg_count: 20\nagg_amount: 2,230", "to": "9974", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "9628", "label": 1, "title": "from: 9628\nto: 9988\nagg_count: 20\nagg_amount: 2,230", "to": "9988", "value": 2230.4, "weight": 1}, {"arrows": "to", "from": "7515", "label": 1, "title": "from: 7515\nto: 8255\nagg_count: 177\nagg_amount: 103,945", "to": "8255", "value": 103945.01999999973, "weight": 1}, {"arrows": "to", "from": "7515", "label": 1, "title": "from: 8682\nto: 7515\nagg_count: 20\nagg_amount: 3,071", "to": "8682", "value": 3070.6000000000013, "weight": 1}, {"arrows": "to", "from": "8682", "label": 1, "title": "from: 8682\nto: 2612\nagg_count: 20\nagg_amount: 3,071", "to": "2612", "value": 3070.6000000000013, "weight": 1}, {"arrows": "to", "from": "8682", "label": 1, "title": "from: 8682\nto: 4501\nagg_count: 20\nagg_amount: 3,071", "to": "4501", "value": 3070.6000000000013, "weight": 1}, {"arrows": "to", "from": "8682", "label": 1, "title": "from: 8682\nto: 5071\nagg_count: 20\nagg_amount: 3,071", "to": "5071", "value": 3070.6000000000013, "weight": 1}, {"arrows": "to", "from": "8682", "label": 1, "title": "from: 8682\nto: 5928\nagg_count: 20\nagg_amount: 3,071", "to": "5928", "value": 3070.6000000000013, "weight": 1}, {"arrows": "to", "from": "8682", "label": 1, "title": "from: 8682\nto: 6124\nagg_count: 20\nagg_amount: 3,071", "to": "6124", "value": 3070.6000000000013, "weight": 1}, {"arrows": "to", "from": "8682", "label": 1, "title": "from: 8682\nto: 6420\nagg_count: 20\nagg_amount: 3,071", "to": "6420", "value": 3070.6000000000013, "weight": 1}, {"arrows": "to", "from": "8682", "label": 1, "title": "from: 8682\nto: 6521\nagg_count: 20\nagg_amount: 3,071", "to": "6521", "value": 3070.6000000000013, "weight": 1}, {"arrows": "to", "from": "8682", "label": 1, "title": "from: 8682\nto: 7176\nagg_count: 20\nagg_amount: 3,071", "to": "7176", "value": 3070.6000000000013, "weight": 1}, {"arrows": "to", "from": "8682", "label": 1, "title": "from: 8682\nto: 720\nagg_count: 20\nagg_amount: 3,071", "to": "720", "value": 3070.6000000000013, "weight": 1}, {"arrows": "to", "from": "8682", "label": 1, "title": "from: 8682\nto: 7285\nagg_count: 20\nagg_amount: 3,071", "to": "7285", "value": 3070.6000000000013, "weight": 1}, {"arrows": "to", "from": "8682", "label": 1, "title": "from: 8682\nto: 8511\nagg_count: 20\nagg_amount: 3,071", "to": "8511", "value": 3070.6000000000013, "weight": 1}, {"arrows": "to", "from": "8682", "label": 1, "title": "from: 8682\nto: 9464\nagg_count: 20\nagg_amount: 3,071", "to": "9464", "value": 3070.6000000000013, "weight": 1}, {"arrows": "to", "from": "8682", "label": 1, "title": "from: 8682\nto: 9512\nagg_count: 20\nagg_amount: 3,071", "to": "9512", "value": 3070.6000000000013, "weight": 1}, {"arrows": "to", "from": "8682", "label": 1, "title": "from: 8682\nto: 9706\nagg_count: 20\nagg_amount: 3,071", "to": "9706", "value": 3070.6000000000013, "weight": 1}, {"arrows": "to", "from": "8682", "label": 1, "title": "from: 8682\nto: 9932\nagg_count: 20\nagg_amount: 3,071", "to": "9932", "value": 3070.6000000000013, "weight": 1}, {"arrows": "to", "from": "8682", "label": 1, "title": "from: 8682\nto: 9945\nagg_count: 20\nagg_amount: 3,071", "to": "9945", "value": 3070.6000000000013, "weight": 1}, {"arrows": "to", "from": "9056", "label": 1, "title": "from: 9056\nto: 1127\nagg_count: 22\nagg_amount: 119", "to": "1127", "value": 119.01999999999995, "weight": 1}, {"arrows": "to", "from": "9056", "label": 1, "title": "from: 9056\nto: 172\nagg_count: 22\nagg_amount: 119", "to": "172", "value": 119.01999999999995, "weight": 1}, {"arrows": "to", "from": "9056", "label": 1, "title": "from: 9056\nto: 2788\nagg_count: 22\nagg_amount: 119", "to": "2788", "value": 119.01999999999995, "weight": 1}, {"arrows": "to", "from": "9056", "label": 1, "title": "from: 9056\nto: 3144\nagg_count: 22\nagg_amount: 119", "to": "3144", "value": 119.01999999999995, "weight": 1}, {"arrows": "to", "from": "9056", "label": 1, "title": "from: 9056\nto: 3667\nagg_count: 22\nagg_amount: 119", "to": "3667", "value": 119.01999999999995, "weight": 1}, {"arrows": "to", "from": "9056", "label": 1, "title": "from: 9056\nto: 4508\nagg_count: 22\nagg_amount: 119", "to": "4508", "value": 119.01999999999995, "weight": 1}, {"arrows": "to", "from": "9056", "label": 1, "title": "from: 9056\nto: 4813\nagg_count: 22\nagg_amount: 119", "to": "4813", "value": 119.01999999999995, "weight": 1}, {"arrows": "to", "from": "9056", "label": 1, "title": "from: 9056\nto: 5864\nagg_count: 22\nagg_amount: 119", "to": "5864", "value": 119.01999999999995, "weight": 1}, {"arrows": "to", "from": "9056", "label": 1, "title": "from: 9056\nto: 6339\nagg_count: 22\nagg_amount: 119", "to": "6339", "value": 119.01999999999995, "weight": 1}, {"arrows": "to", "from": "9056", "label": 1, "title": "from: 9056\nto: 6834\nagg_count: 22\nagg_amount: 119", "to": "6834", "value": 119.01999999999995, "weight": 1}, {"arrows": "to", "from": "9056", "label": 1, "title": "from: 9056\nto: 7863\nagg_count: 22\nagg_amount: 119", "to": "7863", "value": 119.01999999999995, "weight": 1}, {"arrows": "to", "from": "9056", "label": 1, "title": "from: 9056\nto: 8371\nagg_count: 22\nagg_amount: 119", "to": "8371", "value": 119.01999999999995, "weight": 1}, {"arrows": "to", "from": "9056", "label": 1, "title": "from: 9056\nto: 8759\nagg_count: 22\nagg_amount: 119", "to": "8759", "value": 119.01999999999995, "weight": 1}, {"arrows": "to", "from": "9056", "label": 1, "title": "from: 9056\nto: 9045\nagg_count: 22\nagg_amount: 119", "to": "9045", "value": 119.01999999999995, "weight": 1}, {"arrows": "to", "from": "9056", "label": 1, "title": "from: 9056\nto: 9084\nagg_count: 22\nagg_amount: 119", "to": "9084", "value": 119.01999999999995, "weight": 1}, {"arrows": "to", "from": "9056", "label": 1, "title": "from: 9056\nto: 9746\nagg_count: 22\nagg_amount: 119", "to": "9746", "value": 119.01999999999995, "weight": 1}, {"arrows": "to", "from": "9056", "label": 1, "title": "from: 9056\nto: 9842\nagg_count: 22\nagg_amount: 119", "to": "9842", "value": 119.01999999999995, "weight": 1}, {"arrows": "to", "from": "9056", "label": 1, "title": "from: 9056\nto: 9959\nagg_count: 22\nagg_amount: 119", "to": "9959", "value": 119.01999999999995, "weight": 1}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+        network.on("stabilizationProgress", function(params) {
+      		document.getElementById('loadingBar').removeAttribute("style");
+	        var maxWidth = 496;
+	        var minWidth = 20;
+	        var widthFactor = params.iterations/params.total;
+	        var width = Math.max(minWidth,maxWidth * widthFactor);
+
+	        document.getElementById('bar').style.width = width + 'px';
+	        document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+	    });
+	    network.once("stabilizationIterationsDone", function() {
+	        document.getElementById('text').innerHTML = '100%';
+	        document.getElementById('bar').style.width = '496px';
+	        document.getElementById('loadingBar').style.opacity = 0;
+	        // really clean the dom element
+	        setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+	    });
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>
